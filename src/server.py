@@ -24,12 +24,12 @@ def handle_tier_list():
     return jsonify(ret)
 
 
-@app.route('/tier-list', methods=['GET', 'POST'])
-def get_tier_list():
+@app.route('/tier-list/<int:id>', methods=['GET'])
+@app.route('/tier-list', methods=['POST'])
+def get_tier_list(id: int=None):
     if request.method == 'GET':
         try:
-            tl_id = request.args.get('id')
-            return tier_lists[tl_id]
+            return tier_lists[id]
         except:
             return {
                 'error': 'error'
