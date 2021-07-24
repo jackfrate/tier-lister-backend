@@ -3,7 +3,8 @@ from flask_restful import Resource, Api, reqparse
 import json
 
 tier_lists = []
-test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [{"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
+test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [
+    {"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
 tier_lists.append(test_list)
 
 app = Flask(__name__)
@@ -12,11 +13,18 @@ api = Api(app)
 
 @app.route('/tier-list-list', methods=['GET'])
 def handle_tier_list():
-    ret = list(map(create_list_item, tier_lists))
+    ret = []
+    for tl in tier_lists:
+        tl_identifier = {
+            'id': tl['id'],
+            'name': tl['name']
+        }
+        ret.append(tl_identifier)
+
     return jsonify(ret)
 
 
-@app.route('/tier-list/<int:id>', methods=['GET', 'POST'])
+@app.route('/tier-list', methods=['GET', 'POST'])
 def get_tier_list():
     if request.method == 'GET':
         try:
@@ -31,15 +39,4 @@ def get_tier_list():
         id = len(tier_lists)
         tier_list['id'] = id
         tier_lists.append(tier_list)
-
-
-#
-# helper functions
-#
-
-
-def create_list_item(tl):
-    return {
-        'id': tl['id'],
-        'name': tl['name']
-    }
+        return {'message': 'success'}
