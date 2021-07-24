@@ -3,6 +3,8 @@ from flask_restful import Resource, Api, reqparse
 import json
 
 tier_lists = []
+test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [{"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
+tier_lists.append(test_list)
 
 app = Flask(__name__)
 api = Api(app)
@@ -10,8 +12,8 @@ api = Api(app)
 
 @app.route('/tier-list-list', methods=['GET'])
 def handle_tier_list():
-    ret = map(create_list_item, tier_lists)
-    return ret
+    ret = list(map(create_list_item, tier_lists))
+    return jsonify(ret)
 
 
 @app.route('/tier-list/<int:id>', methods=['GET', 'POST'])
@@ -38,7 +40,6 @@ def get_tier_list():
 
 def create_list_item(tl):
     return {
-        'id': tl.id,
-        'name': tl.name,
-        'url': tl.url
+        'id': tl['id'],
+        'name': tl['name']
     }
