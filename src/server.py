@@ -1,13 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 import json
 
 tier_lists = []
+# comment out the following lines when done testing
 test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [
     {"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
 tier_lists.append(test_list)
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
@@ -26,7 +29,7 @@ def handle_tier_list():
 
 @app.route('/tier-list/<int:id>', methods=['GET'])
 @app.route('/tier-list', methods=['POST'])
-def get_tier_list(id: int=None):
+def get_tier_list(id: int = None):
     if request.method == 'GET':
         try:
             return tier_lists[id]
