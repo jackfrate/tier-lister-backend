@@ -2,29 +2,19 @@ from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import json
+from tinydb import TinyDB, Query
 
-tier_lists = []
-# comment out the following lines when done testing
-# test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [
-#     {"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
-# tier_lists.append(test_list)
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+db = TinyDB('./db.json')
+
 
 @app.route('/tier-list-list', methods=['GET'])
 def handle_tier_list():
-    ret = []
-    for tl in tier_lists:
-        tl_identifier = {
-            'id': tl['id'],
-            'name': tl['name']
-        }
-        ret.append(tl_identifier)
-
-    return jsonify(ret)
+    return jsonify(db.all())
 
 
 @app.route('/tier-list/<int:id>', methods=['GET'])
@@ -32,14 +22,15 @@ def handle_tier_list():
 def get_tier_list(id: int = None):
     if request.method == 'GET':
         try:
-            return tier_lists[id]
+            TierList = Query()
+            return jsonify(db.search(TierList.id == id)[0])
         except:
             return {
                 'error': 'error'
             }
     elif request.method == 'POST':
         tier_list = request.json
-        id = len(tier_lists)
+        id = len(db.all())
         tier_list['id'] = id
-        tier_lists.append(tier_list)
+        db.insert(tier_list)
         return {'message': 'success'}
