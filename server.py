@@ -34,3 +34,9 @@ def get_tier_list(id: int = None):
         tier_list['id'] = id
         db.insert(tier_list)
         return {'message': 'success'}
+
+
+@app.route('/delete-all', methods=['DELETE'])
+def delete_all():
+    db.truncate()
+    return {'message': 'success'}
