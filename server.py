@@ -5,9 +5,9 @@ import json
 
 tier_lists = []
 # comment out the following lines when done testing
-test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [
-    {"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
-tier_lists.append(test_list)
+# test_list = {"name": "the_original", "id": 0, "sTier": [], "aTier": [], "bTier": [], "cTier": [
+#     {"url": "", "name": "test"}], "dTier": [], "eTier": [], "fTier": [], "noTier": []}
+# tier_lists.append(test_list)
 
 app = Flask(__name__)
 CORS(app)
