@@ -2,4 +2,4 @@ python-dotenv
 psycopg2
 pymongo
 flask-cors
-guinicorn
+gunicorn
