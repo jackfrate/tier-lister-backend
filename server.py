@@ -4,6 +4,8 @@ from flask_cors import CORS
 import json
 from tinydb import TinyDB, Query
 
+SUCCESS_MESSAGE = {'message': 'success'}
+FAILURE_MESSAGE = {'message': 'error', 'error': 'error'}
 
 app = Flask(__name__)
 CORS(app)
@@ -25,23 +27,27 @@ def get_tier_list(id: int = None):
             TierList = Query()
             return jsonify(db.search(TierList.id == id)[0])
         except:
-            return {
-                'error': 'error'
-            }
+            return FAILURE_MESSAGE
     elif request.method == 'POST':
         tier_list = request.json
         id = len(db.all())
         tier_list['id'] = id
         db.insert(tier_list)
-        return {'message': 'success'}
+        return SUCCESS_MESSAGE
+
 
 @app.route('/tier-list/<int:id>', methods=['DELETE'])
 def delete_single_list(id: int):
-    TierList = Query()
-    db.remove(TierList.id == id)
+    try:
+        TierList = Query()
+        db.remove(TierList.id == id)
+        message = SUCCESS_MESSAGE
+        message['message'] = f'deleted tier list id: {id}'
+        return message
+    except:
+        return FAILURE_MESSAGE
 
 
 @app.route('/delete-all', methods=['DELETE'])
 def delete_all():
     db.truncate()
-    return {'message': 'success'}
