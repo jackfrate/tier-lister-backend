@@ -35,6 +35,11 @@ def get_tier_list(id: int = None):
         db.insert(tier_list)
         return {'message': 'success'}
 
+@app.route('/tier-list/<int:id>', methods=['DELETE'])
+def delete_single_list(id: int):
+    TierList = Query()
+    db.remove(TierList.id == id)
+
 
 @app.route('/delete-all', methods=['DELETE'])
 def delete_all():
