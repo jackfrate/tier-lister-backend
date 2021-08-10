@@ -16,12 +16,19 @@ db = TinyDB('./db.json')
 
 @app.route('/tier-list-list', methods=['GET'])
 def handle_tier_list():
+    """
+    return all tier lists in a json list
+    """
     return jsonify(db.all())
 
 
 @app.route('/tier-list/<int:id>', methods=['GET'])
 @app.route('/tier-list', methods=['POST'])
 def get_tier_list(id: int = None):
+    """
+    either get a tierlist by id, or create a new one
+    TODO: editing tierlists
+    """
     if request.method == 'GET':
         try:
             TierList = Query()
@@ -38,6 +45,9 @@ def get_tier_list(id: int = None):
 
 @app.route('/tier-list/<int:id>', methods=['DELETE'])
 def delete_single_list(id: int):
+    """
+    deletes a single tierlist by id
+    """
     try:
         TierList = Query()
         db.remove(TierList.id == id)
@@ -50,4 +60,7 @@ def delete_single_list(id: int):
 
 @app.route('/delete-all', methods=['DELETE'])
 def delete_all():
+    """
+    delete all tierlists
+    """
     db.truncate()
